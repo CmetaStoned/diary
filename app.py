@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import secrets, os
 from datetime import datetime
 from scripts.code10 import load_env_with_password
-from scripts.code20 import decrypt_entry
+from scripts.code20 import decrypt_entry,encrypt_and_store_entry
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -72,12 +72,10 @@ def write_entry():
         return redirect('login')
 
     if request.method == 'POST':
-        env = session.get(env)
+        env = session['env']
         entry = request.form.get('entry')
-        form_password = request.form.get('password')
         dateandtime = datetime.now().strftime("%d.%m.%Y %H:%M")
-        if form_password == 'Кетамин':
-            write_entry(dateandtime,entry,env)
+        encrypt_and_store_entry(dateandtime,entry,env)
 
     return render_template('write.html')
 
