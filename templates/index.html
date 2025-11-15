@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entries</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="sticky-header">
+    <div class="header-box"><a href="/write">Write an entry</a></div>
+    <div class="header-box"><a href="#">Upload PNG/mp4</a></div>
+    <div class="header-box"><a href="/logout">Fast log out</a></div>
+  </header>
+
+  <main>
+    <div id="entries-container"></div>
+  </main>
+
+<script src="{{ url_for('static', filename='js/entries.js') }}"></script>
+</body>
+</html>

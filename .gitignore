@@ -1,0 +1,3 @@
+.env.enc
+diary.db
+*__pycache__

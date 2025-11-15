@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+  <main>
+    <form class="entry-form">
+      <h1>Write an Entry</h1>
+      <textarea name="entry" placeholder="запись"></textarea>
+      <input type="password" name="password" placeholder="Обязательное слово!!!">
+      <button type="submit">write</button>
+    </form>
+  </main>
+
+</body>
+</html>

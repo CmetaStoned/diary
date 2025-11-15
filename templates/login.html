@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Вход в систему</h2>
+        <form method="POST">
+            <input type="password" name="env_password" placeholder="Пароль для .env" required>
+            <input type="password" name="password" placeholder="Пароль входа" required>
+            
+            <button class="button-45" type="submit">Войти</button>
+            
+            <p class="attempts">Осталось попыток: {{ 3 - session.get('attempts', 0) }}</p>
+        </form>
+    </div>
+</body>
+</html>
