@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import secrets, os
 from datetime import datetime
 from scripts.code10 import load_env_with_password
-from scripts.code20 import decrypt_entry,encrypt_and_store_entry
+from scripts.code20 import decrypt_entry,encrypt_and_store_entry,delete_entry
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -18,7 +18,6 @@ def login():
 
         try:
             env = load_env_with_password(env_password)
-            # Нормализуем ключи и значения
             env = {k.strip(): v.strip().strip('"').strip("'") for k, v in env.items()}
         except Exception as e:
             session['attempts'] += 1
@@ -60,9 +59,13 @@ def api_entries():
     if not session.get('authenticated'):
         return jsonify({"error": "Unauthorized"}), 401
 
+    delete_id = request.args.get("delete_id")
+    if delete_id:
+        delete_entry(delete_id)
+        return jsonify({"status": "deleted", "id": delete_id})
+
     env = session.get('env')
-    entries = decrypt_entry(env)  # список словарей
-    # Убедимся, что формат правильный: список словарей с ключами id, entry, dateandtime
+    entries = decrypt_entry(env)
     return jsonify(entries)
 
 

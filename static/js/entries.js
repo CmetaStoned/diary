@@ -1,5 +1,19 @@
 console.log('Скрипт работает');
 
+function handleDelete(event) {
+  event.preventDefault();
+  const id = document.getElementById('delete-id').value;
+  if (!id) return;
+
+  fetch(`/api/entries?delete_id=${id}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Удаление:", data);
+      fetchEntries(); // обновляем список
+    })
+    .catch(err => console.error("Ошибка удаления:", err));
+}
+
 function fetchEntries() {
   fetch('/api/entries')
     .then(response => {
@@ -17,7 +31,7 @@ function fetchEntries() {
         return;
       }
 
-      data.forEach(item => {
+      data.slice().reverse().forEach(item => {
         if (!item.dateandtime || !item.entry) {
           console.error("Неполные данные:", item);
           return;

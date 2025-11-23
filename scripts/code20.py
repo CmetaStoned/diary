@@ -25,3 +25,13 @@ def decrypt_entry(env):
     dick = [{"id": ide ,"dateandtime": fernet.decrypt(date).decode(), "entry": fernet.decrypt(entry).decode()} for ide, date, entry in cursor.execute("SELECT id, dateandtime, entry FROM entrys")] 
     conn.close()
     return dick
+
+
+def delete_entry(entry_id):
+    conn = sqlite3.connect("diary.db")
+    cursor = conn.cursor()
+    cursor.execute(f'DELETE FROM entrys WHERE id={entry_id}')
+    conn.commit()
+    conn.close()
+
+delete_entry(6)

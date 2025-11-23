@@ -21,6 +21,8 @@ body {
 .login-container h2 {
   margin-bottom: 20px;
   color: #4a2c2c;
+  font-size: 25px;
+  font-weight: 100;
 }
 
 form {

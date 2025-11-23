@@ -34,46 +34,52 @@ body {
   padding: 5px;
 }
 
-.entry{
+.entry {
     display: flex;  
-    width: 100%;
-    font-size: 22px;
+    
     width: 1440px;
-    height: 160px;
-  
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 22px;
+    min-height: 160px;          
+    justify-content: flex-start;
+    align-items: stretch;      
     font-weight: bold;
     border: 3px dashed #634fbc;
+    box-sizing: border-box;
 }
 
-.pre{
+.pre {
     display: flex;
     width: 7%;
     background-color: rgb(85, 93, 143);
-    height: 160px;
-    justify-content: center;  /* по горизонтали */
+    min-height: 160px;          
+    justify-content: center;
     align-items: center;   
     flex-direction: column;
     font-size: 20px;
-    
+    box-sizing: border-box;
 }
 
-
-.info{
+.info {
     width: 86%;
     background-color: rgb(75, 51, 114);
-    height: 160px;
-    padding-left: 16px;
+    min-height: 160px;          
+    padding: 16px;
+    box-sizing: border-box;
+    word-wrap: break-word;     
+    overflow-wrap: break-word;
 }
+
 main {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start;
+  height: calc(100vh - 12.5vh); 
+  overflow-y: auto;    
   background: linear-gradient(135deg, #40606f, #06293c);
+  padding: 20px;
+  box-sizing: border-box;
 }
+
 
 .entry-form {
   display: flex;
@@ -81,22 +87,23 @@ main {
   gap: 20px;
   width: 400px;
   padding: 30px;
-  background-color: #fff;
+  margin-top: 200px;
+  background-color: #40606f;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .entry-form h1 {
   text-align: center;
-  color: #2c434e;
+  color: white;
+  font-weight: 100;
 }
 
 textarea{
     height: 100px;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: #2c434e;
   resize: none;
 }
 
@@ -118,8 +125,44 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: cursive;
 }
 
 button:hover {
   background-color: #1f323a;}
 
+
+#entries-container {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+
+.header-box form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 90%;
+}
+
+.header-box input {
+  width: 30%;
+  padding: 6px;
+  font-size: 16px;
+  background-color: #144c66;
+  text-align: center;
+  color: white;
+  box-sizing: border-box;
+}
+
+.header-box button {
+  padding: 8px;
+  font-size: 16px;
+  background-color: #0d6fa4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

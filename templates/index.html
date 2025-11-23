@@ -9,7 +9,13 @@
 <body>
   <header class="sticky-header">
     <div class="header-box"><a href="/write">Write an entry</a></div>
-    <div class="header-box"><a href="#">Upload PNG/mp4</a></div>
+    <div class="header-box">
+      <form id="delete-form" onsubmit="handleDelete(event)">
+        <input  id="delete-id" placeholder="ID" />
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+    <div class="header-box"><a href="#">Search by date or time</a></div>
     <div class="header-box"><a href="/logout">Fast log out</a></div>
   </header>
 
