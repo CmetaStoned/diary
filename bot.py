@@ -34,7 +34,7 @@ async def handle_message(message: Message):
             password = message.text
             user_passwords[user_id] = {"password": password, "time": now}
 
-        env = load_env_with_password(password)
+        env = load_env_with_password(str(password))
         encrypt_and_store_entry(timestamp, entry, env)
 
         # Удаляем сообщение пользователя
@@ -65,8 +65,8 @@ async def handle_message(message: Message):
         if user_id in user_passwords and now - user_passwords[user_id]["time"] < timedelta(hours=3):
             password = user_passwords[user_id]["password"]
             env = load_env_with_password(password)
-            encrypt_and_store_entry(timestamp, entry, env)
-
+            encrypt_and_store_entry(timestamp, str(entry), env)
+            print(f'Добавлена запись: [{timestamp}]')
             await message.answer(f"Запись сохранена: <b>{timestamp}</b>", reply_markup=ReplyKeyboardRemove())
         else:
             # Отправляем "Контроль" и сохраняем его ID
@@ -81,7 +81,7 @@ async def main():
     try:
         print("Бот запущен")
         await dp.start_polling(bot)
-    except Exception as e:
+    except Exception:
         print("Ошибка при завершении работы:")
         traceback.print_exc()
     finally:
@@ -93,6 +93,6 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Остановка по Ctrl+C")
-    except Exception as e:
+    except Exception:
         print("Глобальная ошибка:")
         traceback.print_exc()

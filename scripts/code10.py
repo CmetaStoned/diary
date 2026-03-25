@@ -1,14 +1,13 @@
-import os
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
 from base64 import urlsafe_b64encode
-from dotenv import dotenv_values
-import json
+
+from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 # Соль для KDF — должна быть постоянной и храниться отдельно
-SALT = b'\x13\x9f\x8a\x7c\x2d\x1e\x9b\x4f\xaa\xcd\x88\xef\x10\x2a\x3c\x5d'
+SALT = b"\x13\x9f\x8a\x7c\x2d\x1e\x9b\x4f\xaa\xcd\x88\xef\x10\x2a\x3c\x5d"
+
 
 def password_to_fernet_key(password: str) -> bytes:
     """Преобразует пароль в ключ Fernet с помощью PBKDF2."""
@@ -17,11 +16,14 @@ def password_to_fernet_key(password: str) -> bytes:
         length=32,
         salt=SALT,
         iterations=100_000,
-        backend=default_backend()
+        backend=default_backend(),
     )
     return urlsafe_b64encode(kdf.derive(password.encode()))
 
-def encrypt_env_file(password: str, env_path: str = ".env", encrypted_path: str = ".env.enc"):
+
+def encrypt_env_file(
+    password: str, env_path: str = ".env", encrypted_path: str = ".env.enc"
+):
     """Шифрует .env файл и сохраняет его как .env.enc"""
     key = password_to_fernet_key(password)
     fernet = Fernet(key)
@@ -33,6 +35,7 @@ def encrypt_env_file(password: str, env_path: str = ".env", encrypted_path: str 
 
     with open(encrypted_path, "wb") as f:
         f.write(encrypted)
+
 
 def load_env_with_password(password: str, encrypted_path: str = ".env.enc") -> dict:
     """Расшифровывает .env.enc и возвращает переменные окружения как словарь"""
@@ -53,7 +56,4 @@ def load_env_with_password(password: str, encrypted_path: str = ".env.enc") -> d
 
     return env_vars
 
-
-# encrypt_env_file("mysecretpassword")
-# env = load_env_with_password("mysecretpassword")
-# print(env["API_KEY"])
+encrypt_env_file('narcissism')

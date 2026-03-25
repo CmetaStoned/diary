@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import secrets, os
+import secrets
 from datetime import datetime
 from scripts.code10 import load_env_with_password
 from scripts.code20 import decrypt_entry,encrypt_and_store_entry,delete_entry
@@ -60,11 +60,11 @@ def api_entries():
         return jsonify({"error": "Unauthorized"}), 401
 
     delete_id = request.args.get("delete_id")
+    env = session.get('env')
     if delete_id:
-        delete_entry(delete_id)
+        delete_entry(delete_id,env)
         return jsonify({"status": "deleted", "id": delete_id})
 
-    env = session.get('env')
     entries = decrypt_entry(env)
     return jsonify(entries)
 
@@ -78,7 +78,7 @@ def write_entry():
         env = session['env']
         entry = request.form.get('entry')
         dateandtime = datetime.now().strftime("%d.%m.%Y %H:%M")
-        encrypt_and_store_entry(dateandtime,entry,env)
+        encrypt_and_store_entry(dateandtime,str(entry),env)
 
     return render_template('write.html')
 

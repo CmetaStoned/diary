@@ -10,7 +10,7 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #144c66;
+  background-color: #083D77;
   height: 12.5vh; /* 1/8 от высоты экрана */
   z-index: 1000;
 }
@@ -18,7 +18,7 @@ body {
 .header-box {
   width: 12.5vw; /* 1/8 от ширины экрана */
   aspect-ratio: 1 / 1; /* квадрат */
-  background-color: #48576e;
+  background-color: #4B3F72;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@ body {
 .pre {
     display: flex;
     width: 7%;
-    background-color: rgb(85, 93, 143);
+    background-color: #961D4E;
     min-height: 160px;          
     justify-content: center;
     align-items: center;   
@@ -61,12 +61,13 @@ body {
 
 .info {
     width: 86%;
-    background-color: rgb(75, 51, 114);
+    background-color: #EE4266;
     min-height: 160px;          
     padding: 16px;
     box-sizing: border-box;
     word-wrap: break-word;     
     overflow-wrap: break-word;
+    
 }
 
 main {
@@ -75,7 +76,7 @@ main {
   align-items: flex-start;
   height: calc(100vh - 12.5vh); 
   overflow-y: auto;    
-  background: linear-gradient(135deg, #40606f, #06293c);
+  background-color: #6153CC;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -151,7 +152,7 @@ button:hover {
   width: 30%;
   padding: 6px;
   font-size: 16px;
-  background-color: #144c66;
+  background-color: #083D77;
   text-align: center;
   color: white;
   box-sizing: border-box;
@@ -160,7 +161,7 @@ button:hover {
 .header-box button {
   padding: 8px;
   font-size: 16px;
-  background-color: #0d6fa4;
+  background-color: #083D77;
   color: white;
   border: none;
   border-radius: 5px;
