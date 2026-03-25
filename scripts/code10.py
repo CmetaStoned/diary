@@ -56,4 +56,3 @@ def load_env_with_password(password: str, encrypted_path: str = ".env.enc") -> d
 
     return env_vars
 
-encrypt_env_file('narcissism')
