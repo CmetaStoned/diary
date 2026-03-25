@@ -1,6 +1,7 @@
 import os
 import asyncio
 import traceback
+from aiohttp import web  # Добавили импорт для веб-заглушки
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import ReplyKeyboardRemove, Message
 from datetime import datetime, timedelta
@@ -11,13 +12,17 @@ from scripts.code20 import encrypt_and_store_entry
 TOKEN = os.getenv("BOT_TOKEN")
 
 if not TOKEN:
-    raise ValueError("Токен не найден")
+    raise ValueError("Токен не найден! Укажи BOT_TOKEN в переменных окружения.")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 user_data = {}
 user_passwords = {}
+
+# --- ФУНКЦИЯ ДЛЯ ВЕБ-ЗАГЛУШКИ (ЧТОБЫ RENDER НЕ РУГАЛСЯ) ---
+async def handle_ping(request):
+    return web.Response(text="Бот жив, логика работает, Render доволен!")
 
 @dp.message(F.text)
 async def handle_message(message: Message):
@@ -85,6 +90,19 @@ async def handle_message(message: Message):
             }
 
 async def main():
+    # --- ЗАПУСК ВЕБ-ЗАГЛУШКИ ---
+    app = web.Application()
+    app.router.add_get('/', handle_ping)
+    
+    # Render передает свой порт, если его нет — используем 10000
+    port = int(os.environ.get("PORT", 10000))
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, '0.0.0.0', port)
+    await site.start()
+    print(f"Веб-заглушка запущена на порту {port}")
+    # --- КОНЕЦ НАСТРОЙКИ ВЕБ-ЗАГЛУШКИ ---
+
     try:
         print("Бот запущен")
         await dp.start_polling(bot)
@@ -93,6 +111,7 @@ async def main():
         traceback.print_exc()
     finally:
         await bot.session.close()
+        await runner.cleanup()  # Важно: закрываем веб-сервер при выключении бота
         print("Бот остановлен")
 
 if __name__ == "__main__":
