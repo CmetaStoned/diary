@@ -2,7 +2,6 @@ import os
 import asyncio
 import traceback
 from aiohttp import web  # Добавили импорт для веб-заглушки
-import aiohttp
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import ReplyKeyboardRemove, Message
 from datetime import datetime, timedelta
