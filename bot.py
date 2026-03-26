@@ -2,6 +2,7 @@ import os
 import asyncio
 import traceback
 from aiohttp import web  # Добавили импорт для веб-заглушки
+import aiohttp
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import ReplyKeyboardRemove, Message
 from datetime import datetime, timedelta
@@ -20,9 +21,11 @@ dp = Dispatcher()
 user_data = {}
 user_passwords = {}
 
-# --- ФУНКЦИЯ ДЛЯ ВЕБ-ЗАГЛУШКИ (ЧТОБЫ RENDER НЕ РУГАЛСЯ) ---
+
 async def handle_ping(request):
-    return web.Response(text="Бот жив, логика работает, Render доволен!")
+    return web.Response(text="Бот дневника работает 24/7!")
+
+
 
 @dp.message(F.text)
 async def handle_message(message: Message):
@@ -90,7 +93,7 @@ async def handle_message(message: Message):
             }
 
 async def main():
-    # --- ЗАПУСК ВЕБ-ЗАГЛУШКИ ---
+    # --- НАСТРОЙКА И ЗАПУСК ВЕБ-ЗАГЛУШКИ ---
     app = web.Application()
     app.router.add_get('/', handle_ping)
     
@@ -101,7 +104,7 @@ async def main():
     site = web.TCPSite(runner, '0.0.0.0', port)
     await site.start()
     print(f"Веб-заглушка запущена на порту {port}")
-    # --- КОНЕЦ НАСТРОЙКИ ВЕБ-ЗАГЛУШКИ ---
+    # --- КОНЕЦ НАСТРОЙКИ ---
 
     try:
         print("Бот запущен")
