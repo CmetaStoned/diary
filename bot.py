@@ -1,6 +1,7 @@
 import os
 import asyncio
 import traceback
+from zoneinfo import ZoneInfo
 from aiohttp import web  # Добавили импорт для веб-заглушки
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import ReplyKeyboardRemove, Message
@@ -29,7 +30,7 @@ async def handle_ping(request):
 @dp.message(F.text)
 async def handle_message(message: Message):
     user_id = message.from_user.id
-    now = datetime.now()
+    now = datetime.now(ZoneInfo("Asia/Jerusalem"))
 
     # Если ждём пароль
     if user_id in user_data and "entry" in user_data[user_id]:
@@ -107,6 +108,7 @@ async def main():
 
     try:
         print("Бот запущен")
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     except Exception:
         print("Ошибка при завершении работы:")
