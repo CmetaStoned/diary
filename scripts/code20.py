@@ -37,6 +37,7 @@ def decrypt_entry(env):
         })
         
     conn.close()
+    
     return dick
 
 
