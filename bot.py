@@ -163,6 +163,8 @@ async def main():
     print(f"Веб-заглушка запущена на порту {port}")
     # КОНЕЦ НАСТРОЙКИ 
 
+    scheduler.start()
+
     try:
         print("Бот запущен")
         await bot.delete_webhook(drop_pending_updates=True)
