@@ -5,6 +5,10 @@ from zoneinfo import ZoneInfo
 from aiohttp import web  
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import ReplyKeyboardRemove, Message
+from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime, timedelta
 from scripts.code10 import load_env_with_password
 from scripts.code20 import encrypt_and_store_entry
@@ -19,13 +23,24 @@ if not TOKEN:
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
+scheduler = AsyncIOScheduler()
+
 
 user_data = {}
 user_passwords = {}
 
+class RemainderStates(StatesGroup):
+    waiting_for_text = State()
+    waiting_for_time = State()
+
 
 async def handle_ping(request):
     return web.Response(text="Бот дневника работает 24/7!")
+
+
+async def send_reminder(bot: Bot, chat_id: int, text: str):
+    await bot.send_message(chat_id, f"Напоминание: {text}")
+
 
 
 @dp.message(F.text | F.photo)
@@ -105,6 +120,35 @@ async def handle_message(message: Message):
                 "img": img,  
                 "control_msg_id": control_msg.message_id
             }
+
+@dp.message(Command('remind'))
+async def cmd_remind(message: Message, state: FSMContext):
+    await message.answer('Напоминание?')
+    await state.set_state(RemainderStates.waiting_for_text)
+
+@dp.message(RemainderStates.waiting_for_text)
+async def process_text(message:Message, state:FSMContext):
+    await state.update_data(remind_text=message.text)
+    await message.answer('Через сколько минут напомнить?')
+    await state.set_state(RemainderStates.waiting_for_time)
+
+@dp.message(RemainderStates.waiting_for_time)
+async def process_time(message:Message, state:FSMContext, bot:Bot):
+    minutes = int(message.text)
+    data = await state.get_data()
+    text = data.get("remind_text")
+
+    run_time = datetime.now(ZoneInfo("Asia/Jerusalem")) + timedelta(minutes=minutes)
+
+    scheduler.add_job(
+        send_reminder,
+        trigger='date',
+        run_date=run_time,
+        kwargs={"bot": bot, "chat_id": message.chat.id, "text": text}
+    )
+
+    await message.answer("Напомню!")
+    await state.clear()
 
 async def main():
     # НАСТРОЙКА И ЗАПУСК ЗАГЛУШКИ ДЛЯ ХОСТА 

@@ -23,7 +23,7 @@ def decrypt_entry(env):
     fernet = Fernet(key.encode())
     conn = psycopg2.connect(env['DATABASE_URL'])
     cursor = conn.cursor()
-    cursor.execute("SELECT id, dateandtime, entry, img FROM entrys")
+    cursor.execute("SELECT id, dateandtime, entry, img FROM entrys ORDER BY id ASC;")
     rows = cursor.fetchall()
     dick = []
     for ide, date, entry, img in rows:
