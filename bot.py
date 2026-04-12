@@ -62,10 +62,10 @@ async def process_text(message:Message, state:FSMContext):
 @dp.message(RemainderStates.waiting_for_time)
 async def process_time(message:Message, state:FSMContext):
     await message.delete()
+    data = await state.get_data()
     await bot.delete_message(chat_id=message.chat.id,
     message_id= data.get("time_quest"))
     minutes = int(message.text)
-    data = await state.get_data()
     text = data.get("remind_text")
 
     run_time = datetime.now(ZoneInfo("Asia/Jerusalem")) + timedelta(minutes=minutes)
