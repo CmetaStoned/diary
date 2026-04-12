@@ -44,17 +44,22 @@ async def send_reminder(bot: Bot, chat_id: int, text: str):
 
 @dp.message(Command('remind'))
 async def cmd_remind(message: Message, state: FSMContext):
-    await message.answer('Напоминание?')
+    remind_question = await message.answer('Напоминание?')
     await state.set_state(RemainderStates.waiting_for_text)
+    await state.update_data(remind_quest = remind_question.message_id)
 
 @dp.message(RemainderStates.waiting_for_text)
 async def process_text(message:Message, state:FSMContext):
+    data = await state.get_data()
+    await bot.delete_message(chat_id=message.chat.id,
+    message_id= data.get("remind_quest"))
+    await message.delete()
     await state.update_data(remind_text=message.text)
     await message.answer('Через сколько минут напомнить?')
     await state.set_state(RemainderStates.waiting_for_time)
 
 @dp.message(RemainderStates.waiting_for_time)
-async def process_time(message:Message, state:FSMContext, bot:Bot):
+async def process_time(message:Message, state:FSMContext):
     minutes = int(message.text)
     data = await state.get_data()
     text = data.get("remind_text")
