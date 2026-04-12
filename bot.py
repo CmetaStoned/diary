@@ -54,12 +54,16 @@ async def process_text(message:Message, state:FSMContext):
     await bot.delete_message(chat_id=message.chat.id,
     message_id= data.get("remind_quest"))
     await message.delete()
-    await state.update_data(remind_text=message.text)
-    await message.answer('Через сколько минут напомнить?')
+    time_question = await message.answer('Через сколько минут напомнить?')
+    await state.update_data(remind_text=message.text,
+                            time_quest= time_question.message_id)
     await state.set_state(RemainderStates.waiting_for_time)
 
 @dp.message(RemainderStates.waiting_for_time)
 async def process_time(message:Message, state:FSMContext):
+    await message.delete()
+     await bot.delete_message(chat_id=message.chat.id,
+    message_id= data.get("time_quest"))
     minutes = int(message.text)
     data = await state.get_data()
     text = data.get("remind_text")
